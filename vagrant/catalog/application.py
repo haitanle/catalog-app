@@ -8,8 +8,6 @@ from sqlalchemy import create_engine
 
 import random, string, requests, json, httplib2
 import flask
-import google.oauth2.credentials
-import google_auth_oauthlib.flow
 
 from flask import make_response
 from oauth2client.client import FlowExchangeError, flow_from_clientsecrets
