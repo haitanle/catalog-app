@@ -1,0 +1,31 @@
+{% extends "main.html" %}
+{% block content %}
+
+<h2>Add Player</h2>
+
+<form action="{{url_for('addPlayer')}}" method="post">
+	Player Name: <input name="player_name" type="text"/>
+	<br>
+	Position:
+	<select name="player_position">
+		<option value="Forward">Forward</option>
+		<option value="Midfielder">Midfielder</option>
+		<option value="Defender">Defender</option>
+		<option value="Goalie">Goalie</option>
+	</select>
+	<br>Player Bio:	
+	<br>
+  	<textarea name="player_description" rows="10" cols="30"></textarea>
+  	<br>
+  	Team:
+  	<select name="team">
+  		{% for team in teams %}
+  		<option value="{{team.id}}|{{team.name}}">{{team.name}}</option>
+  		{% endfor %}
+  	</select>
+  	<br>
+  	<input type="submit">
+  	<a href="{{url_for('main')}}">Cancel</a>
+</form>
+
+{% endblock %}

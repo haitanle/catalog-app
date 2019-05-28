@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
+	</script>
+
+	<!--load the gapi object -->
+	<script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+	
+	<script>
+		function start() {
+			gapi.load('auth2',function(){
+				auth2 = gapi.auth2.init({
+					client_id:'223796795514-c04keu991pajt3ggmt08sqsloc530838.apps.googleusercontent.com'
+				});
+			});
+		}
+	</script>
+
+</head>
+<body>
+<title>Soccer Players Catalog</title>
+
+<div class="navbar navbar-dark bg-primary navbar-fixed-top">
+<a class="navbar-brand" href="{{url_for('main')}}">Soccer Players Catalog</a>
+<br>
+
+{% if isLogin == False %}
+	
+	<button class="btn btn-secondary" id="siginButton">Sign in with Google</button>
+	<script type="text/javascript">
+		$('#siginButton').click(function(){
+			auth2.grantOfflineAccess().then(onSignIn);
+		});
+	</script>
+{% else %}
+	<a class="btn btn-secondary btn-sm" href="{{url_for('gdisconnect')}}" role="button">Logout</a>
+{% endif %}
+</div>
+
+<div class="container">
+{% block content %}
+<div id="result"></div>
+
+<div class="row">
+	<div class="col-md-3">
+		<h2>Teams:</h2>
+		{% for team in teams %}
+			<a href="{{url_for('team', team_id=team.id) }}">{{team.name}}</a>
+			<br>
+		{% endfor %}
+	</div>
+	<div class="col-md-9">
+		<h2>Recent Updates:</h2>
+		{% with messages = get_flashed_messages() %}
+		  {% if messages %}
+		    <ul class=flashes>
+		    {% for message in messages %}
+		      <li>{{ message }}</li>
+		    {% endfor %}
+		    </ul>
+		  {% endif %}
+		{% endwith %}
+	</div>
+	</div>
+	{% endblock %}
+</div>
+
+<script>
+	function onSignIn(authResult){
+		console.log("Siginning In");
+		if (authResult['code']){
+			console.log("authorized");
+			$('#signinButton').attr('style','display:none');
+
+			$.ajax({
+				type: 'POST',
+				url: '/gconnect?state={{state}}',
+				headers: {'X-Requested-With': 'XMLHttpRequest'},
+				processData: false,
+				contentType: 'application/octet-stream; charset=utf-8',
+				data: authResult['code'],
+				success: function(result){
+					console.log('successfully logged in');
+					if (result){
+						console.log('redirecting...')
+						$('#result').html('Login Successful!</br>Redirecting...')
+						setTimeout(function() {
+							window.location.href = '/';
+						},4000);
+					} else if (authResult['error']){
+						console.log('There was an error: '+authResult['error']);
+					} else {
+						$('#result').html('Failed to make a server-side call. Check your donfiguration and console');
+					}
+				}
+			});
+		}
+	}
+</script>
+</body>
+</html>

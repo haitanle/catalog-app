@@ -1,0 +1,24 @@
+{% extends "main.html" %}
+{% block content %}
+
+{% if isLogin == True %}
+	<a href="{{url_for('addPlayer')}}">Add Player</a>
+{% endif %}
+
+<div class="row">
+	<div class="col-md-3">
+		<h2>Teams:</h2>
+		{% for team in teams %}
+			<a href="{{url_for('team', team_id=team.id) }}">{{team.name}}</a>
+			<br>
+		{% endfor %}
+	</div>
+	<div class="col-md-9">
+		<h2>{{team}} players:</h2>
+		{% for player in players %}
+			<a href="{{url_for('player', player_id=player.id) }}">{{player.name}}</a>
+			<br>
+		{% endfor %}
+		</div>
+</div>
+{% endblock %}

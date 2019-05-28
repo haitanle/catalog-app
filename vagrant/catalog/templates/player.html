@@ -1,0 +1,16 @@
+{% extends "main.html" %}
+{% block content %}
+
+	<h2>{{player.name}}</h2>
+	<p>{{player.bio}}</p>
+
+	{% if session['logIn'] and session['editable'] %}
+		<a href="{{url_for('editPlayer', player_id =player.id) }}">Edit Player</a>
+		</br>
+		<a href="{{url_for('deletePlayer', player_id =player.id)}}">
+		Delete Player</a>
+		</br>
+	{% endif %}
+	<a href="{{url_for('team', team_id =player.team_id)}}">Back</a>
+
+{% endblock %}

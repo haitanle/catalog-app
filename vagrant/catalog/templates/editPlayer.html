@@ -1,0 +1,33 @@
+{% extends "main.html" %}
+{% block content %}
+
+<h2>Edit Player</h2>
+<form action="{{url_for('editPlayer', player_id = player.id )}}" method="post">
+	Player Name: <input name="player_name" type="text" value="{{player.name}}"/>
+	<br>
+	Position:
+	<select name="player_position">
+    <option value={{player.position}} selected hidden>{{player.position}}</option>
+		<option value="Forward">Forward</option>
+		<option value="Midfielder">Midfielder</option>
+		<option value="Defender">Defender</option>
+		<option value="Goalie">Goalie</option>
+	</select>
+	<br>Player Bio:
+  <br>
+  	<textarea name="player_description" rows="10" cols="30" value=>{{player.bio}}</textarea>
+  	<br>
+  	Team:
+  	<select name="team">
+  		{% for team in teams %}
+      <option 
+      {% if player.team_id == team.id %} selected {% endif %} 
+      value="{{team.id}}|{{team.name}}">{{team.name}}</option>
+  		{% endfor %}
+  	</select>
+  	<br>
+  	<input type="submit">
+  	<a href="{{url_for('team', team_id =player.team_id)}}">Cancel</a>
+</form>
+
+{% endblock %}
