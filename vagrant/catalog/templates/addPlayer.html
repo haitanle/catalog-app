@@ -4,7 +4,7 @@
 <h2>Add Player</h2>
 
 <form action="{{url_for('addPlayer')}}" method="post">
-	Player Name: <input name="player_name" type="text"/>
+	Player Name: <input required name="player_name" type="text"/>
 	<br>
 	Position:
 	<select name="player_position">
@@ -15,7 +15,7 @@
 	</select>
 	<br>Player Bio:	
 	<br>
-  	<textarea name="player_description" rows="10" cols="30"></textarea>
+  	<textarea required name="player_description" rows="10" cols="30"></textarea>
   	<br>
   	Team:
   	<select name="team">

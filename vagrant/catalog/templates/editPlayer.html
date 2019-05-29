@@ -3,7 +3,7 @@
 
 <h2>Edit Player</h2>
 <form action="{{url_for('editPlayer', player_id = player.id )}}" method="post">
-	Player Name: <input name="player_name" type="text" value="{{player.name}}"/>
+	Player Name: <input required name="player_name" type="text" value="{{player.name}}"/>
 	<br>
 	Position:
 	<select name="player_position">
@@ -15,7 +15,7 @@
 	</select>
 	<br>Player Bio:
   <br>
-  	<textarea name="player_description" rows="10" cols="30" value=>{{player.bio}}</textarea>
+  	<textarea required name="player_description" rows="10" cols="30" value=>{{player.bio}}</textarea>
   	<br>
   	Team:
   	<select name="team">
