@@ -1,4 +1,5 @@
-from flask import Flask, jsonify, request, render_template, redirect, url_for, flash, session as login_session
+from flask import Flask, jsonify, flash, session as login_session
+from flask import request, render_template, redirect, url_for
 
 from models import Base,User,Team,Player
 
@@ -62,7 +63,7 @@ def gconnect():
   		response = make_response(json.dumps("Token's user ID doesn't match given user ID"),401)
   		response.headers['Content-Type'] = 'application/json'
   		return response
-    
+
     #Verify that the access token is valid for this app. 
    	if result['issued_to'] != CLIENT_ID:
    		print('***Error invalid for app***')
@@ -313,47 +314,45 @@ def editable(player_id):
 	return False
 
 def getSoccerJSON():
-	DBSession = sessionmaker(bind=engine)
-	session = DBSession() 
+    DBSession = sessionmaker(bind=engine)
+    session = DBSession() 
 
-	dataList = []
-	teams = session.query(Team).all()
-	for team in teams:
-		players = session.query(Player).filter_by(team_id=team.id)
-		playerList = []
-		for player in players:
-			playerList.append(player.serialize)
-		dataList.append({team.serialize['teamName']:playerList})
-
-	return jsonify(dataList)
-			
+    dataList = []
+    teams = session.query(Team).all()
+    for team in teams:
+    	players = session.query(Player).filter_by(team_id=team.id)
+    	playerList = []
+    	for player in players:
+    		playerList.append(player.serialize)
+    	dataList.append({team.serialize['teamName']:playerList})
+    return jsonify(dataList)
 
 def getUserID(email):
-	DBSession = sessionmaker(bind=engine)
-	session = DBSession()
+    DBSession = sessionmaker(bind=engine)
+    session = DBSession()
 
-	try:
-		user = session.query(User).filter_by(email=email).one()
-		return user.id
-	except Exception:
-		return None
+    try:
+    	user = session.query(User).filter_by(email=email).one()
+    	return user.id
+    except Exception:
+    	return None
 
 def getUserInfo(user_id):
-	DBSession = sessionmaker(bind=engine)
-	session = DBSession()
-	return session.query(User).filter_by(id=user_id).one()
+    DBSession = sessionmaker(bind=engine)
+    session = DBSession()
+    return session.query(User).filter_by(id=user_id).one()
 
 def createUser(login_session):
-	DBSession = sessionmaker(bind=engine)
-	session = DBSession()
+    DBSession = sessionmaker(bind=engine)
+    session = DBSession()
 
-	newUser = User(username=login_session['username'], email = login_session['email'])
-	session.add(newUser)
-	session.commit()
-	user = session.query(User).filter_by(email=login_session['email']).one()
-	return user.id
+    newUser = User(username=login_session['username'], email = login_session['email'])
+    session.add(newUser)
+    session.commit()
+    user = session.query(User).filter_by(email=login_session['email']).one()
+    return user.id
 
 if __name__ == '__main__':
-	app.secret_key = 'supersecretkey'
-	app.debug = True
-	app.run(host='0.0.0.0', port =5000)
+    app.secret_key = 'supersecretkey'
+    app.debug = True
+    app.run(host='0.0.0.0', port =5000)
