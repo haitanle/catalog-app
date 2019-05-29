@@ -55,7 +55,7 @@ After you have `vagrant ssh`, `cd` to directory `/vagrant/catalog` and run `pyth
 
 ### Web App on Browser
 
-Open web browser to `http://localhost:5000/main` to see the app. There should be pre-loaded data on the main page to get started.
+Open web browser to `http://localhost:5000/main` to see the app. There are pre-loaded data on the main page to get started.
 
 ## Using the Web App
 
