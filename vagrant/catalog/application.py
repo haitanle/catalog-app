@@ -21,7 +21,7 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 app = Flask(__name__)
 
-#endpoint to hanlde Google OAuth response 
+#endpoint to hanlde Google OAuth response
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
 	#check for anti-forgery 
@@ -143,11 +143,14 @@ def gdisconnect():
 
 	return redirect(url_for('main'))
 	
-
+"""
+main function: display the main page for logged and non-logged in user..
+"""
 @app.route('/')
 @app.route('/main')
 def main():
 	if 'user_id' in login_session:
+        #determines whether login/non-login display
 		login_session['logIn'] = True 
 	else:
 		login_session['logIn'] = False
@@ -161,6 +164,7 @@ def addPlayer():
 			return render_template('addPlayer.html', isLogin=login_session['logIn'], teams=getAllTeams())
 		if request.method == 'POST':
 
+            #get form input, team name and id
 			team = request.form['team'].split('|')
 			team_id = team[0]
 			team_name = team[1]
@@ -178,7 +182,7 @@ def addPlayer():
 	else:
 		return redirect(url_for('main'))
 
-
+# display the teams page
 @app.route('/team/<int:team_id>')
 def team(team_id):
 	DBSession = sessionmaker(bind=engine)
@@ -192,7 +196,7 @@ def team(team_id):
 
 	return render_template('team.html', state=generateState(), isLogin=login_session['logIn'], team=teamName, teams=getAllTeams(), players = players)
 
-
+# display the player page
 @app.route('/team/player/<int:player_id>')
 def player(player_id):
 	if 'user_id' not in login_session:
@@ -264,6 +268,11 @@ def deletePlayer(player_id):
 def jsonData():
 	return getSoccerJSON()
 
+"""
+generateState function: generate state code to test for anti-forgery
+Returns:
+    return state anti-forgery code
+"""
 def generateState():
 	state = ''.join(random.choice(string.ascii_uppercase + string.digits)
 		for x in xrange(32))
@@ -287,6 +296,13 @@ def getPlayer(player_id):
 	session = DBSession()
 	return session.query(Player).filter_by(id=player_id).first()
 
+"""
+editable function: determine whether user have edit privilege to curren player
+Args:
+    player_id (int): id of the player
+Returns:
+    return (boolean) determin
+"""
 def editable(player_id):
 	DBSession = sessionmaker(bind=engine)
 	session = DBSession()
