@@ -51,11 +51,11 @@ If you are now looking at a shell prompt that starts with the word `vagrant` (as
 
 ### Running the App
 
-After you have `vagrant ssh`, `cd` to directory `/vagrant/catalog` and then run the application with `python application.py`. 
+After you have `vagrant ssh`, `cd` to directory `/vagrant/catalog` and run `python models.py` to build the database model. Then run the application with `python application.py`. 
 
 ### Web App on Browser
 
-Open web browser to `http://localhost:5000/main` to see the app
+Open web browser to `http://localhost:5000/main` to see the app. There should be pre-loaded data on the main page to get started.
 
 ## Using the Web App
 
